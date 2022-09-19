@@ -2,7 +2,7 @@
 
 Fluent-Bit go RabbitMQ output plugin
 
-## Run Fluent Bit with the new plugin
+# Run Fluent Bit with the new plugin
 
 ```
 $ sudo docker-compose up -d rabbitmq
@@ -10,7 +10,7 @@ $ sudo docker-compose up -d rabbitmq
 $ sudo docker-compose up --build fluentbit
 ```
 
-## Configuration Parameters
+# Configuration Parameters
 
 | **Key**        | **Description**                                                 |
 |----------------|-----------------------------------------------------------------|
@@ -21,6 +21,6 @@ $ sudo docker-compose up --build fluentbit
 | ExchangeName   | The exchange to which fluent-bit send its logs                  |
 | ExchangeType   | The exchange-type                                               |
 
-## License
+# License
 
  * MIT
