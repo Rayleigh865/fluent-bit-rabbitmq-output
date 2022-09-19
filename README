@@ -1,0 +1,27 @@
+# fluent-bit-rabbitmq-output
+
+Fluent-Bit go RabbitMQ output plugin
+
+## Run Fluent Bit with the new plugin
+
+```
+$ sudo docker-compose up -d rabbitmq
+# wait for rabbitmq to come up
+$ sudo docker-compose up --build fluentbit
+```
+
+## Configuration Parameters
+
+Key                        | Description                                                                        | Default
+-------------------------- | ---------------------------------------------------------------------------------- | -------------------------
+RabbitHost           | The hostname of the Rabbit-MQ server                                       | none
+RabbitPort                    | The port under which the Rabbit-MQ is reachable                                            | none
+RabbitUser                  | The user of the Rabbit-MQ host                                 | none
+RabbitPassword                      | The username of the user which connects to the Rabbit-MQ server                         | none
+ExchangeName            | The exchange to which fluent-bit send its logs                      | none
+ExchangeType                 | The exchange-type                                   | none
+
+
+## License
+
+ * MIT
