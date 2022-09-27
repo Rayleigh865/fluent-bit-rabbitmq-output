@@ -19,7 +19,6 @@ services:
     depends_on:
       - rabbitmq
     volumes:
-      - ./sample.log:/fluent-bit/etc/sample.log
       - ./fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
   
 volumes:
