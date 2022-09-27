@@ -11,14 +11,9 @@ import (
 )
 
 var (
-	connection               *amqp.Connection
-	channel                  *amqp.Channel
-	exchangeName             string
-	routingKey               string
-	routingKeyDelimiter      string
-	removeRkValuesFromRecord bool
-	addTagToRecord           bool
-	addTimestampToRecord     bool
+	connection   *amqp.Connection
+	channel      *amqp.Channel
+	exchangeName string
 )
 
 //export FLBPluginRegister
@@ -38,25 +33,20 @@ func FLBPluginInit(plugin unsafe.Pointer) int {
 	exchangeName = output.FLBPluginConfigKey(plugin, "ExchangeName")
 	exchangeType := output.FLBPluginConfigKey(plugin, "ExchangeType")
 
-	if len(routingKeyDelimiter) < 1 {
-		routingKeyDelimiter = "."
-		logInfo("The routing-key-delimiter is set to the default value '" + routingKeyDelimiter + "' ")
-	}
-
 	connection, err = amqp.Dial("amqp://" + user + ":" + password + "@" + host + ":" + port + "/")
 	if err != nil {
-		logError("Failed to establish a connection to RabbitMQ: ", err)
+		LogError("Failed to establish a connection to RabbitMQ: ", err)
 		return output.FLB_ERROR
 	}
 
 	channel, err = connection.Channel()
 	if err != nil {
-		logError("Failed to open a channel: ", err)
+		LogError("Failed to open a channel: ", err)
 		connection.Close()
 		return output.FLB_ERROR
 	}
 
-	logInfo("Established successfully a connection to the RabbitMQ-Server")
+	LogInfo("Established successfully a connection to the RabbitMQ-Server")
 
 	err = channel.ExchangeDeclare(
 		exchangeName, // name
@@ -69,7 +59,7 @@ func FLBPluginInit(plugin unsafe.Pointer) int {
 	)
 
 	if err != nil {
-		logError("Failed to declare an exchange: ", err)
+		LogError("Failed to declare an exchange: ", err)
 		connection.Close()
 		return output.FLB_ERROR
 	}
@@ -94,7 +84,7 @@ func FLBPluginFlushCtx(ctx, data unsafe.Pointer, length C.int, tag *C.char) int 
 		parsedRecord := ParseRecord(record)
 		jsonString, err := json.Marshal(parsedRecord)
 		if err != nil {
-			logError("Couldn't parse record: ", err)
+			LogError("Couldn't parse record: ", err)
 			continue
 		}
 
@@ -108,7 +98,7 @@ func FLBPluginFlushCtx(ctx, data unsafe.Pointer, length C.int, tag *C.char) int 
 				Body:        jsonString,
 			})
 		if err != nil {
-			logError("Couldn't publish record: ", err)
+			LogError("Couldn't publish record: ", err)
 		}
 	}
 	return output.FLB_OK
@@ -153,11 +143,11 @@ func parseSubRecordArray(arr []interface{}) *[]interface{} {
 	return &arr
 }
 
-func logInfo(msg string) {
+func LogInfo(msg string) {
 	log.Printf("%s", msg)
 }
 
-func logError(msg string, err error) {
+func LogError(msg string, err error) {
 	log.Printf("%s: %s", msg, err)
 }
 
